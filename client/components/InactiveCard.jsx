@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Details from './Details';
 import { Card, Button } from 'react-bootstrap';
 
 const InactiveCard = ({
@@ -8,7 +8,7 @@ const InactiveCard = ({
   show,
   onClick,
   showDetails,
-  toggleDetailsModal,
+  toggleDetailsModal
 }) => {
   return (
     <Card

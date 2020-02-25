@@ -7,7 +7,10 @@ import InactiveCard from './InactiveCard';
 import EditCampaign from './EditCampaign';
 import CreateCampaign from './CreateCampaign';
 
+//This is the main artist management page
 class Dashboard extends Component {
+  //assigns props passed down (artistId and campaignId)
+  //initializes state
   constructor(props) {
     super(props);
     this.state = {
@@ -16,11 +19,11 @@ class Dashboard extends Component {
       currentCampaign: {},
       showEditModal: false,
       showCreateModal: false,
-      showDetailsModal: false,
+      showDetailsModal: false
     };
     this.assignCurrentCampaign = this.assignCurrentCampaign.bind(this);
     this.assignCurrentCampaignDetails = this.assignCurrentCampaignDetails.bind(
-      this,
+      this
     );
     this.toggleCreateModal = this.toggleCreateModal.bind(this);
     this.toggleEditModal = this.toggleEditModal.bind(this);
@@ -28,23 +31,23 @@ class Dashboard extends Component {
     this.loadArtistCampaigns = this.loadArtistCampaigns.bind(this);
     this.deactivateCampaign = this.deactivateCampaign.bind(this);
   }
-
+  //fetch the artist's campaigns
   componentDidMount() {
     this.loadArtistCampaigns();
   }
-
+  //this function hides or shows the create modal
   toggleCreateModal(show) {
     this.setState({ showCreateModal: show });
   }
-
+  //this function hides or shows the edit modal
   toggleEditModal(show) {
     this.setState({ showEditModal: show });
   }
-
+  //this function hides or shows the details modal
   toggleDetailsModal(show) {
     this.setState({ showDetailsModal: show });
   }
-
+  //when you click edit on the currentcampaign is assigned in the state for view of the edit
   assignCurrentCampaign(id) {
     let currentCampaign = {};
     this.state.campaigns.forEach(campaign => {
@@ -54,7 +57,7 @@ class Dashboard extends Component {
     });
     this.setState({ currentCampaign, showEditModal: true });
   }
-
+  //when you click edit on the currentcampaign is assigned in the state for view of the details metrics modal
   assignCurrentCampaignDetails(id) {
     let currentCampaign = {};
     this.state.campaigns.forEach(campaign => {
@@ -64,7 +67,7 @@ class Dashboard extends Component {
     });
     this.setState({ currentCampaign, showDetailsModal: true });
   }
-
+  // loads all the artists campaigns with the props.artistid passed down
   loadArtistCampaigns() {
     fetch('/artist/dashboard/')
       .then(data => data.json())
@@ -73,19 +76,19 @@ class Dashboard extends Component {
         this.setState({
           campaigns: res.campaigns,
           showEditModal: false,
-          showCreateModal: false,
+          showCreateModal: false
         });
       })
       .catch(err => {
         console.log('Error retrieving campaigns: ', err);
       });
   }
-
+  //deactiviating campaign
   deactivateCampaign(campaignId) {
     fetch('/artist/deactivatecampaign', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: campaignId }),
+      body: JSON.stringify({ id: campaignId })
     })
       .then(res => res.json())
       .then(data => {
@@ -100,6 +103,7 @@ class Dashboard extends Component {
   render() {
     const { campaigns } = this.state;
     const cards = campaigns.map((campaign, i) => {
+      //only render active cards for active campaigns
       if (campaign.active) {
         return (
           <ActiveCard
@@ -116,6 +120,7 @@ class Dashboard extends Component {
         );
       } else {
         return (
+          //only render inactive cards for inactive campaigns
           <InactiveCard
             key={campaign.id}
             id={campaign.id}
@@ -130,6 +135,7 @@ class Dashboard extends Component {
     });
 
     return (
+      //title
       <div className="dashboard">
         <Jumbotron fluid>
           <h1>My Dashboard</h1>
@@ -145,12 +151,14 @@ class Dashboard extends Component {
             Create Campaign
           </Button>
         </div>
+        {/* edit modal */}
         <EditCampaign
           show={this.state.showEditModal}
           currentCampaign={this.state.currentCampaign}
           toggleEditModal={this.toggleEditModal}
           loadArtistCampaigns={this.loadArtistCampaigns}
         />
+        {/* create modal */}
         <CreateCampaign
           show={this.state.showCreateModal}
           artistId={this.props.artistId}
