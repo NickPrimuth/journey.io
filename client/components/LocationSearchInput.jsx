@@ -1,13 +1,9 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng
-} from 'react-places-autocomplete';
+import PlacesAutocomplete from 'react-places-autocomplete';
 
+//gooogle autocomplete component
 const LocationSearchInput = props => {
-  // When the user selects an autocomplete suggestion...
-
   const renderInput = ({
     getInputProps,
     getSuggestionItemProps,
@@ -60,7 +56,6 @@ const LocationSearchInput = props => {
         value={props.address}
         onChange={props.handleChange}
         onSelect={props.handleSelect}
-        // Pass the search options prop
         searchOptions={searchOptions}
       >
         {renderInput}
